@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/product_detail_screen.dart';
 import 'package:shop_app/screens/products_overview_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData(
@@ -17,6 +20,9 @@ class MyApp extends StatelessWidget {
           secondary: Colors.orange,
           ),
       ),
+      routes: {
+        ProductDetailScreen.routeName:(context) => const ProductDetailScreen()
+      },
       home: ProductsOverviewScreen(),
     );
   }
