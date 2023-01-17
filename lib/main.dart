@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
     final ThemeData theme = ThemeData(
       fontFamily: 'Lato',
       );
-    return ChangeNotifierProvider(create: (context) => Products(),
+    return ChangeNotifierProvider(
+      create: (_) => Products(),
       child: MaterialApp(
         title: 'MyShop',
         theme: theme.copyWith(
