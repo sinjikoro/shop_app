@@ -37,5 +37,10 @@ class Cart with ChangeNotifier {
         () => CartItem(id: DateTime.now().toString(), title: title, quantity: 1, price: price),
       );
     }
+    notifyListeners();
+  }
+  
+  int get itemCount {
+    return _items.length;
   }
 }

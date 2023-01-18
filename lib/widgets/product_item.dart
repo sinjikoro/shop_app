@@ -3,14 +3,18 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
 
 import '../providers/product.dart';
+import '../providers/cart.dart';
 
 class ProductItem extends StatelessWidget {
   const ProductItem({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Product>(
-      builder: (BuildContext context, product, Widget? child) => ClipRRect(
+    final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
+
+    return 
+      ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
           footer: GridTileBar(
@@ -22,7 +26,7 @@ class ProductItem extends StatelessWidget {
             title: Text(product.title, textAlign: TextAlign.center,),
             trailing: IconButton(
               icon: const Icon(Icons.shopping_cart),
-              onPressed: () {},
+              onPressed: () => cart.addItem(product.id, product.price, product.title),
               color: Theme.of(context).colorScheme.secondary,),
           ),
           child: GestureDetector(
@@ -32,7 +36,6 @@ class ProductItem extends StatelessWidget {
             child: Image.network(product.imageUrl, fit: BoxFit.cover,)
             ),
           ),
-      ),
-    );
+      );
   }
 }
