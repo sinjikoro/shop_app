@@ -20,27 +20,44 @@ class CartScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              const Text('Total', style: TextStyle(fontSize: 20),),
-              const SizedBox(width: 20,),
-              const Spacer(),
-              Chip(
-                label: Text(cart.totalAmount.toString(), style: TextStyle(color: Theme.of(context).primaryTextTheme.titleMedium?.color),),
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-              TextButton(
-                onPressed: () {},
-                style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor)),
-                child: const Text('ORDER NOW'),
-              ),
-            ]),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Total',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  const Spacer(),
+                  Chip(
+                    label: Text(
+                      cart.totalAmount.toString(),
+                      style: TextStyle(
+                          color: Theme.of(context)
+                              .primaryTextTheme
+                              .titleMedium
+                              ?.color),
+                    ),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).primaryColor)),
+                    child: const Text('ORDER NOW'),
+                  ),
+                ]),
           ),
         ),
-        const SizedBox(height: 10,),
-        Expanded(child: ListView.builder(
-          itemCount: cart.items.length,
-          itemBuilder: (context, index) => CartItem(
+        const SizedBox(
+          height: 10,
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: cart.items.length,
+            itemBuilder: (context, index) => CartItem(
               id: cart.items.values.toList()[index].id,
               productId: cart.items.keys.toList()[index],
               title: cart.items.values.toList()[index].title,
