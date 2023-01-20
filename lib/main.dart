@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/orders.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 
 import 'package:shop_app/screens/product_detail_screen.dart';
@@ -17,26 +18,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData(
       fontFamily: 'Lato',
-      );
+    );
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Products(),),
-        ChangeNotifierProvider(create: (_) => Cart(),)
-      ],
-      child: MaterialApp(
+        providers: [
+          ChangeNotifierProvider(create: (_) => Products()),
+          ChangeNotifierProvider(create: (_) => Cart()),
+          ChangeNotifierProvider(create: (_) => Orders())
+        ],
+        child: MaterialApp(
           title: 'MyShop',
           theme: theme.copyWith(
             colorScheme: theme.colorScheme.copyWith(
               primary: Colors.purple,
               secondary: Colors.orange,
-              ),
+            ),
           ),
           routes: {
-            ProductDetailScreen.routeName:(context) => const ProductDetailScreen(),
-            CartScreen.routeName:(context) => const CartScreen(),
+            ProductDetailScreen.routeName: (context) =>
+                const ProductDetailScreen(),
+            CartScreen.routeName: (context) => const CartScreen(),
           },
           home: const ProductsOverviewScreen(),
-      )
-    );
+        ));
   }
 }
