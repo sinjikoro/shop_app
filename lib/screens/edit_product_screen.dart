@@ -27,14 +27,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
   };
 
   @override
+  void initState() {
+    _imageUrlFocusNode.addListener(_updateImageUrl);
+    super.initState();
+  }
+
+  @override
   void dispose() {
+    _imageUrlFocusNode.removeListener(_updateImageUrl);
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
     _imageUrlControler.dispose();
     super.dispose();
   }
 
-//TODO どこかで入れ忘れている..
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
       final text = _imageUrlControler.text;
@@ -70,7 +76,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (isInit) {
-      final productID = ModalRoute.of(context)?.settings.arguments as String;
+      final productID = ModalRoute.of(context)?.settings.arguments as String?;
       if (productID != null) {
         _editedProduct = Provider.of<Products>(context).findById(productID);
         _initValues = {
