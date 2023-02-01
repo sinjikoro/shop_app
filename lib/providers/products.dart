@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'product.dart';
 
@@ -47,6 +49,17 @@ class Products with ChangeNotifier {
   }
 
   appProduct(Product product) {
+    const url =
+        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json';
+    http.post(Uri.parse(url),
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+        }));
+
     final newProduct = Product(
       id: DateTime.now().toString(),
       title: product.title,
