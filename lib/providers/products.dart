@@ -49,8 +49,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> appProduct(Product product) {
-    const url =
-        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json';
+    const url = 'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product';
     return http
         .post(Uri.parse(url),
             body: json.encode({
@@ -70,6 +69,9 @@ class Products with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
+    }).catchError((error) {
+      debugPrint(error.toString());
+      throw error;
     });
   }
 

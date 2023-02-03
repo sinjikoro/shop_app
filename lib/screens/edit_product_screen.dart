@@ -70,7 +70,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_editedProduct.id?.isEmpty ?? true) {
       Provider.of<Products>(context, listen: false)
           .appProduct(_editedProduct)
-          .then((_) {
+          .catchError((error) {
+        // ignore: prefer_void_to_null
+        // https://github.com/flutter/flutter/issues/49336#issuecomment-585614212
+        return showDialog<Null>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('An error occurred!'),
+            content: const Text('something went wrong.'),
+            actions: [
+              TextButton(
+                onPressed: (() {
+                  Navigator.of(ctx).pop();
+                }),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }).then((_) {
         setState(() {
           _isLoading = false;
         });
