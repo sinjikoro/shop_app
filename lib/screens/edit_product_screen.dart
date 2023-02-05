@@ -57,23 +57,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
-    final isValid = _form.currentState?.validate() ?? false;
-    if (!isValid) {
-      return;
-    }
-
+  void _saveForm() async {
     _form.currentState?.save();
-    setState(() {
-      _isLoading = true;
-    });
     if (_editedProduct.id?.isEmpty ?? true) {
-      Provider.of<Products>(context, listen: false)
-          .appProduct(_editedProduct)
-          .catchError((error) {
-        // ignore: prefer_void_to_null
-        // https://github.com/flutter/flutter/issues/49336#issuecomment-585614212
-        return showDialog<Null>(
+      final isValid = _form.currentState?.validate() ?? false;
+      if (!isValid) return;
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+        await Provider.of<Products>(context, listen: false)
+            .appProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
             title: const Text('An error occurred!'),
@@ -88,12 +84,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      }).then((_) {
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     } else {
       Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id!, _editedProduct)

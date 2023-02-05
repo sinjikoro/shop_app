@@ -48,18 +48,22 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  Future<void> appProduct(Product product) {
-    const url = 'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product';
-    return http
-        .post(Uri.parse(url),
-            body: json.encode({
-              'title': product.title,
-              'description': product.description,
-              'price': product.price,
-              'imageUrl': product.imageUrl,
-              'isFavorite': product.isFavorite,
-            }))
-        .then((response) {
+  Future<void> appProduct(Product product) async {
+    try {
+      const url =
+          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json';
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(
+          {
+            'title': product.title,
+            'description': product.description,
+            'price': product.price,
+            'imageUrl': product.imageUrl,
+            'isFavorite': product.isFavorite,
+          },
+        ),
+      );
       final newProduct = Product(
         id: json.decode(response.body)['name'],
         title: product.title,
@@ -69,10 +73,10 @@ class Products with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
-    }).catchError((error) {
+    } catch (error) {
       debugPrint(error.toString());
-      throw error;
-    });
+      rethrow;
+    }
   }
 
   Future<void> updateProduct(String id, Product newProduct) {
