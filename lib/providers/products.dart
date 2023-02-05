@@ -48,6 +48,17 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
+  fetchAndSetProducts() async {
+    const url =
+        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json';
+    try {
+      final response = await http.get(Uri.parse(url));
+      print(json.decode(response.body));
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> appProduct(Product product) async {
     try {
       const url =
