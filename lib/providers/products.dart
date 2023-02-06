@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_app/models/http_exception.dart';
 import 'dart:convert';
 
 import 'product.dart';
@@ -90,9 +91,20 @@ class Products with ChangeNotifier {
     return Future.value();
   }
 
-  deleteProduct(String id) {
-    _items.removeWhere((product) => product.id == id);
+  Future<void> deleteProduct(String id) async {
+    final url =
+        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product/$id.json';
+    final existingProductionIndex = _items.indexWhere((prod) => prod.id == id);
+    var existingProduct = _items[existingProductionIndex];
+    _items.removeAt(existingProductionIndex);
     notifyListeners();
+
+    final response = await http.delete(Uri.parse(url));
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductionIndex, existingProduct);
+      notifyListeners();
+      throw const HttpException('Could not delete product.');
+    }
   }
 
   Product findById(String id) {
