@@ -71,6 +71,19 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) {
     final index = _items.indexWhere((product) => product.id == id);
     if (index >= 0) {
+      final url =
+          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product/$id.json';
+      http.patch(
+        Uri.parse(url),
+        body: json.encode(
+          {
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'imageUrl': newProduct.imageUrl,
+            'price': newProduct.price,
+          },
+        ),
+      );
       _items[index] = newProduct;
       notifyListeners();
     }

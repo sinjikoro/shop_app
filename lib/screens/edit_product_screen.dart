@@ -84,14 +84,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
-      }
+      } finally {}
     } else {
-      Provider.of<Products>(context, listen: false)
+      await Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id!, _editedProduct)
           .then((_) {
         setState(() {
@@ -100,6 +95,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
         Navigator.of(context).pop();
       });
     }
+    setState(() {
+      _isLoading = false;
+    });
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   bool isInit = true;
