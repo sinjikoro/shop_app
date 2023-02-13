@@ -48,3 +48,5 @@ android
 ios
 web
 .fvm
+
+/lib/env/*

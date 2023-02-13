@@ -22,12 +22,14 @@ class Products with ChangeNotifier {
   String _userId = '';
   set userId(id) => _userId = id;
 
-  fetchAndSetProducts() async {
+  fetchAndSetProducts([bool filterByUser = false]) async {
     try {
+      final filterString =
+          filterByUser ? '&orderBy="creatorId"&equalTo="$_userId"' : '';
       var url =
-          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json?auth=$_authToken';
+          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json?auth=$_authToken$filterString';
       final response = await http.get(Uri.parse(url));
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body);
 
       url =
           'https://shop-app-shinnaga-default-rtdb.firebaseio.com/userFavorite/$_userId.json?auth=$_authToken';
@@ -57,8 +59,8 @@ class Products with ChangeNotifier {
 
   Future<void> appProduct(Product product) async {
     try {
-      const url =
-          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json';
+      final url =
+          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json?auth=$_authToken';
       final response = await http.post(
         Uri.parse(url),
         body: json.encode(
@@ -68,9 +70,11 @@ class Products with ChangeNotifier {
             'price': product.price,
             'imageUrl': product.imageUrl,
             'isFavorite': product.isFavorite,
+            'creatorId': _userId,
           },
         ),
       );
+      print(json.decode(response.body));
       final newProduct = Product(
         id: json.decode(response.body)['name'],
         title: product.title,
