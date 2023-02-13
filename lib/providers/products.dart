@@ -16,10 +16,10 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  String _authToken = '';
+  String? _authToken = '';
   set authToken(token) => _authToken = token;
 
-  String _userId = '';
+  String? _userId = '';
   set userId(id) => _userId = id;
 
   fetchAndSetProducts([bool filterByUser = false]) async {
