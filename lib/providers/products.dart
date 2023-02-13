@@ -19,20 +19,34 @@ class Products with ChangeNotifier {
   String _authToken = '';
   set authToken(token) => _authToken = token;
 
+  String _userId = '';
+  set userId(id) => _userId = id;
+
   fetchAndSetProducts() async {
-    final url =
-        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json?auth=$_authToken';
     try {
+      var url =
+          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json?auth=$_authToken';
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+
+      url =
+          'https://shop-app-shinnaga-default-rtdb.firebaseio.com/userFavorite/$_userId.json?auth=$_authToken';
+      final favoriteResponse = await http.get(Uri.parse(url));
+      final favoriteData = json.decode(favoriteResponse.body);
+
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
-        loadedProducts.add(Product(
+        loadedProducts.add(
+          Product(
             id: prodId,
             title: prodData['title'],
             description: prodData['description'],
             price: prodData['price'],
-            imageUrl: prodData['imageUrl']));
+            imageUrl: prodData['imageUrl'],
+            isFavorite:
+                favoriteData == null ? false : favoriteData[prodId] ?? false,
+          ),
+        );
       });
       _items = loadedProducts;
       notifyListeners();

@@ -25,19 +25,17 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavoriteStatus(String authToken) async {
+  Future<void> toggleFavoriteStatus(String authToken, String userId) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
     final url =
-        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product/$id.json?auth=$authToken';
+        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/userFavorite/$userId/$id.json?auth=$authToken';
     try {
-      final response = await http.patch(
+      final response = await http.put(
         Uri.parse(url),
         body: json.encode(
-          {
-            'isFavorite': isFavorite,
-          },
+          isFavorite,
         ),
       );
       if (response.statusCode >= 400) {
