@@ -28,9 +28,12 @@ class Orders extends ChangeNotifier {
   String _authToken = '';
   set authToken(token) => _authToken = token;
 
+  String _userId = '';
+  set userId(id) => _userId = id;
+
   Future<void> fetchAndSetOrders() async {
     final url =
-        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/orders.json?auth=$_authToken';
+        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/orders/$_userId.json?auth=$_authToken';
     final response = await http.get(Uri.parse(url));
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>?;
@@ -58,7 +61,7 @@ class Orders extends ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final url =
-        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/orders.json?auth=$_authToken';
+        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/orders/$_userId.json?auth=$_authToken';
     final timestamp = DateTime.now();
     http.post(Uri.parse(url),
         body: json.encode({
