@@ -16,12 +16,12 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  String _userToken = '';
-  set userToken(token) => _userToken = token;
+  String _authToken = '';
+  set authToken(token) => _authToken = token;
 
   fetchAndSetProducts() async {
     final url =
-        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json?auth=$_userToken';
+        'https://shop-app-shinnaga-default-rtdb.firebaseio.com/product.json?auth=$_authToken';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
